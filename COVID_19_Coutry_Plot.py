@@ -73,12 +73,13 @@ def plot_figure():
         return
 
     fig = plt.figure(figsize=(16, 9))
+    fig.suptitle(f"Trends for {country} @{today}", fontsize=12, fontweight='bold', y=1)
     gs = fig.add_gridspec(2, 2)
     sns.set_style("whitegrid")
 
     # DEATHS PLOT
     ax1 = plt.subplot(gs[0, 0])
-    ax1.set_title(f"Deats Trend for {country} @{today}")
+    ax1.set_title("Deaths Trend")
 
     # Daily Increase Plot
     ax1.set_ylabel("Daily Deaths Increase", color="blue")
@@ -102,7 +103,7 @@ def plot_figure():
 
     # CASES PLOT
     ax3 = plt.subplot(gs[0, 1])
-    ax3.set_title(f"Cases Trend for {country} @{today}")
+    ax3.set_title("Cases Trend")
 
     # New Cases
     ax3.tick_params(axis="y", labelcolor="blue")
