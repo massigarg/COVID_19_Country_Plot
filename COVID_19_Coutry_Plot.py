@@ -9,25 +9,25 @@ today = datetime.today().strftime("%d-%m-%Y")
 
 # #Total Deaths
 if not os.path.isfile(f"./total_deaths_{today}.csv"):
-    urllib.request.urlretrieve("https://covid.ourworldindata.org/data/ecdc/total_deaths.csv",
-                               f"total_deaths_{today}.csv")
+    urllib.request.urlretrieve("https://covid.ourworldindata.org/data/ecdc/total_deaths.csv",f"total_deaths_{today}.csv")
 df_total_deaths = pd.read_csv(f"total_deaths_{today}.csv", parse_dates=["date"])
-df_total_deaths["date"] = pd.to_datetime(df_total_deaths["date"]).dt.strftime("%d-%m-%y")
-df_total_deaths = df_total_deaths.fillna(0)
+df_total_deaths["date"] = pd.to_datetime(df_total_deaths["date"]).dt.strftime("%b-%d")
+df_total_deaths = df_total_deaths.fillna(method="bfill")[1:]
+
 
 # #Total Confirmed Cases
 if not os.path.isfile(f"./total_cases_{today}.csv"):
     urllib.request.urlretrieve("https://covid.ourworldindata.org/data/ecdc/total_cases.csv", f"total_cases_{today}.csv")
 df_total_cases = pd.read_csv(f"total_cases_{today}.csv", parse_dates=["date"])
-df_total_cases["date"] = pd.to_datetime(df_total_cases["date"]).dt.strftime("%d-%m-%y")
-df_total_cases = df_total_cases.fillna(0)
+df_total_cases["date"] = pd.to_datetime(df_total_cases["date"]).dt.strftime("%b-%d")
+df_total_cases = df_total_cases.fillna(method="bfill")[1:]
 
 # #New Confirmed Cases
 if not os.path.isfile(f"./new_cases_{today}.csv"):
     urllib.request.urlretrieve("https://covid.ourworldindata.org/data/ecdc/new_cases.csv", f"new_cases_{today}.csv")
 df_new_cases = pd.read_csv(f"new_cases_{today}.csv", parse_dates=["date"])
-df_new_cases["date"] = pd.to_datetime(df_new_cases["date"]).dt.strftime("%d-%m-%y")
-df_new_cases = df_new_cases.fillna(0)
+df_new_cases["date"] = pd.to_datetime(df_new_cases["date"]).dt.strftime("%b-%d")
+df_new_cases = df_new_cases.fillna(method="bfill")[1:]
 
 def get_days():
     return df_total_deaths["date"]
@@ -41,10 +41,10 @@ def get_countries():
 def daily_death_increase():
     daily_increase = []
     for i in range(len(df_total_deaths[country])):
-        if i == 0:
-            daily_increase.append(df_total_deaths[country][i])
+        if i == 0 or i==1:
+            daily_increase.append(df_total_deaths[country].iloc[i])
         else:
-            daily_increase.append(df_total_deaths[country][i] - df_total_deaths[country][i - 1])
+            daily_increase.append(df_total_deaths[country].iloc[i] - df_total_deaths[country].iloc[i - 1])
     return daily_increase
 
 
